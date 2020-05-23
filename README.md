@@ -41,4 +41,6 @@ require_once 'php_fw_simple/lib/index.php';
 template_render('ファイル名', ["パラメータ" => 値]);
 ```
 
+テンプレートで使える値は、[こちらのコード](./lib/fw_template_engine.lib.php) を確認してください。
+
 
