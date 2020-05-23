@@ -17,10 +17,13 @@ function database_get() {
     return $FW_DB_MAIN;
   }
   // Check info
-  extract($FW_DB_INFO);
-  if (empty($file_db)) {
-    echo '<h1>[ERROR] Database not set.</h1>'; exit;
+  if (!isset($FW_DB_INFO)) {
+    echo "<h1>[ERROR] \$FW_DB_INFO not set.</h1>";
+    echo '$FW_DB_INFO = ["file_db"=>"","file_sql"=>""];';
+    exit;
   }
+  extract($FW_DB_INFO);
+  
   // Open
   $need_init = FALSE;
   if (!file_exists($file_db)) {

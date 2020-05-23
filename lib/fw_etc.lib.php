@@ -69,6 +69,19 @@ function fw_send_email_to_admin($subject, $email_body) {
   fw_send_email($FW_ADMIN_EMAIL, $subject, $email_body);
 }
 
+function has_ngword($s) {
+  global $ngword_list;
+  if (!isset($ngword_list)) {
+    return FALSE;
+  }
+  foreach ($ngword_list as $word) {
+    if (FALSE !== strpos($s, $word)) {
+      return TRUE;
+    }
+  }
+}
+
+
 
 
 

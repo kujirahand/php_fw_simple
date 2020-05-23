@@ -25,7 +25,7 @@ function template_render($tpl_filename, $tpl_params) {
   global $DIR_TEMPLATE_CACHE;
   global $FW_TEMPLATE_PARAMS;
   // extract variable
-  if (!empty($FW_TEMPLATE_PARAMS)) {
+  if (isset($FW_TEMPLATE_PARAMS)) {
     extract($FW_TEMPLATE_PARAMS);
   }
   extract($tpl_params);
