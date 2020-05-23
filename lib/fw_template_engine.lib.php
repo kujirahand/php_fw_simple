@@ -24,18 +24,20 @@ function template_render($tpl_filename, $tpl_params) {
   global $DIR_TEMPLATE;
   global $DIR_TEMPLATE_CACHE;
   global $FW_TEMPLATE_PARAMS;
-  if (!isset($DIR_TEMPLATE)) {
-    echo "Please set global \$DIR_TEMPLATE."; exit;
-  }
   // extract variable
-  extract($FW_TEMPLATE_PARAMS);
+  if (!empty($FW_TEMPLATE_PARAMS)) {
+    extract($FW_TEMPLATE_PARAMS);
+  }
   extract($tpl_params);
   // check template
   $file_template = $DIR_TEMPLATE."/$tpl_filename";
   if (!file_exists($file_template)) {
-    $msg = "FileNotFound : $tpl_filename";
-    template_error($msg);
-    throw new Exception($msg);
+    $file_template = __DIR__.'/template/'.$tpl_filename;
+    if (!file_exists($file_template)) {
+      $msg = "FileNotFound : $tpl_filename";
+      template_error($msg);
+      throw new Exception($msg);
+    }
   }
   
   // check cache file
