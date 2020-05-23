@@ -58,3 +58,15 @@ template_render('ファイル名', ["パラメータ" => 値]);
 
 テンプレートで使える値は、[こちらのコード](./lib/fw_template_engine.lib.php) を確認してください。
 
+## サンプルと具体例
+
+- (1) アクション index を作成しよう
+ - [action/index.action.php](./sample/action/index.action.php) を生成
+- (2) テンプレート index を作成しよう
+ - [template/index.html](./sample/template/index.html) を作成
+
+
+
+
+
+
