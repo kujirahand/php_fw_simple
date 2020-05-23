@@ -2,12 +2,27 @@
 
 simple framework for php
 
-# 想定するディレクトリレイアウト
+# これは何？
+
+とてもシンプルなPHPフレームワークです。
+以下のWebアプリを作るために、作成したものです。
+
+ - [俳句投稿サイト「あやめ」](https://haiku.uta.pw/)
+ - [KonaWiki3](https://kujirahand.com/konawiki3/)
+
+フレームワーク使うほどではないけど、何かちょっと最小最低限の仕組みの中で作りたいという場合に最適です。
+何が入っているかと言うと、以下のものが入っています。
+
+ - MVCのようなもの
+ - テンプレートエンジン
+ - データベース(SQLite)を手軽に使うラッパー
+
+
+# 想定するディレクトリのレイアウト
 
 ```
 <root>
 +- index.php ... メインファイル
-+ <static> ... CSSやJSファイルを配置
 + <action> ... アクションを配置
 + <template> ... テンプレートを配置
 + <cache> ... テンプレートのキャッシュが保存される
@@ -42,5 +57,16 @@ template_render('ファイル名', ["パラメータ" => 値]);
 ```
 
 テンプレートで使える値は、[こちらのコード](./lib/fw_template_engine.lib.php) を確認してください。
+
+## サンプルと具体例
+
+- (1) アクション index を作成しよう
+ - [action/index.action.php](./sample/action/index.action.php) を生成
+- (2) テンプレート index を作成しよう
+ - [template/index.html](./sample/template/index.html) を作成
+
+
+
+
 
 
