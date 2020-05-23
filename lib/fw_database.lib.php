@@ -49,14 +49,6 @@ function db_exec($sql, $params = array()) {
   return $db;
 }
 
-function db_insert($sql, $params = array()) {
-  $db = database_get();
-  $stmt = $db->prepare($sql);
-  $stmt->execute($params);
-  $id = $db->lastInsertId();
-  return $id;
-}
-
 function db_get($sql, $params = array()) {
   $db = database_get();
   $stmt = $db->prepare($sql);
@@ -81,6 +73,46 @@ function db_table_exists($table) {
   return (isset($r['name']));
 }
 
+function db_insert($sql, $params = array()) {
+  $db = database_get();
+  $stmt = $db->prepare($sql);
+  $stmt->execute($params);
+  $id = $db->lastInsertId();
+  return $id;
+}
+
+function db_insert_kv($table, $kv) {
+  $sql = "INSERT INTO $table ";
+  $params = [];
+  $keys = [];
+  $vals = [];
+  foreach ($kv as $k => $v) {
+    $keys[] = $k;
+    $vals[] = "?";
+    $params[] = $v;
+  }
+  $sql .= "(" . implode(",", $keys) . ")";
+  $sql .= "VALUES(" . implode(",", $vals) . ")";
+  return db_insert($sql, $params);
+}
+
+function db_update_kv($table, $kv, $where_kv) {
+  $sql = "UPDATE $table SET ";
+  $params = [];
+  $upv = [];
+  foreach ($kv as $k => $v) {
+    $upv[] = "$k=?";
+    $params[] = $v;
+  }
+  $cond = [];
+  foreach ($where_kv as $k => $v) {
+    $cond[] = "$k=?";
+    $params[] = $v;
+  }
+  $sql .= implode(",", $upv)." WHERE ";
+  $sql .= implode(" AND ", $cond);
+  return db_exec($sql, $params);
+}
 
 
 
