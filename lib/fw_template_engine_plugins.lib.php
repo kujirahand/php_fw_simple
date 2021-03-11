@@ -6,7 +6,7 @@ function t_echo($v) {
   echo $v;
 }
 function t_multiline($v) {
-  $v = htmlspecialchars($v);
+  $v = htmlspecialchars(trim($v));
   $v = preg_replace('#(\r\n|\n|\r)#s', '<br>', $v);
   echo $v;
 }
