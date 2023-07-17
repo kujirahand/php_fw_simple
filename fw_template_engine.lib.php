@@ -68,9 +68,8 @@ function template_render($tpl_filename, $tpl_params)
         }
     }
     // create cache
-    $fw_contents = "<?php /*[fw_template_engine.lib.php] ".TEMPLATE_VERSION.
-          "*/";
-    $fw_contents .= "?>";
+    $templateVersion = TEMPLATE_VERSION;
+    $fw_contents = "<?php /* [fw_template_engine.lib.php] v{$templateVersion} */ ?> ";
     $fw_contents .= file_get_contents($file_template);
     $fw_contents = preg_replace_callback_array([
     // flow
@@ -131,7 +130,7 @@ function template_render($tpl_filename, $tpl_params)
         return "<?php echo t_echo(\$$key);?>";
     },
     // string with filter {{ "..." | filter }}
-    '#\{\{\s*(\".*?\"|\'.*?\')\s*\|\s*([a-zA-Z0-9_]+)\s*}}#is' => function (&$m) {
+    '#\{\{\s*(\".*?\"|\'.*?\')\s*\|\s*([a-zA-Z0-9_]+)\s*}}#is' => function ($m) {
         $str = $m[1];
         $filter = $m[2];
         return "<?php echo t_{$filter}($str);?>";
