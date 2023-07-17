@@ -9,6 +9,7 @@ simple framework for php
 
  - [俳句投稿サイト「あやめ」](https://haiku.uta.pw/)
  - [KonaWiki3](https://kujirahand.com/konawiki3/)
+ - [なでしこ3貯蔵校](https://n3s.nadesi.com)
 
 フレームワーク使うほどではないけど、何かちょっと最小最低限の仕組みの中で作りたいという場合に最適です。
 何が入っているかと言うと、以下のものが入っています。
@@ -31,7 +32,7 @@ simple framework for php
 
 ## 作成する項目
 
-そして、php_fw_simple/lib/index.php にリンク
+そして、php_fw_simple/index.php にリンク
 
 ```file:index.php
 <?php
@@ -40,7 +41,7 @@ $DIR_ACTION = __DIR__.'/action';
 $DIR_TEMPLATE = __DIR__.'/template';
 $DIR_TEMPLATE_CACHE = __DIR__.'/cache';
 // ライブラリを取り込む
-require_once 'php_fw_simple/lib/index.php';
+require_once 'php_fw_simple/index.lib.php';
 ```
 
 ## アクションの作成
@@ -56,14 +57,12 @@ require_once 'php_fw_simple/lib/index.php';
 template_render('ファイル名', ["パラメータ" => 値]);
 ```
 
-テンプレートで使える値は、[こちらのコード](./lib/fw_template_engine.lib.php) を確認してください。
+テンプレートで使える値は、[こちらのコード](./fw_template_engine.lib.php) を確認してください。
 
 ## サンプルと具体例
 
-- (1) アクション index を作成しよう
- - [action/index.action.php](./sample/action/index.action.php) を生成
-- (2) テンプレート index を作成しよう
- - [template/index.html](./sample/template/index.html) を作成
+- https://github.com/kujirahand/konawiki3/
+- https://github.com/kujirahand/nako3storage/
 
 
 
