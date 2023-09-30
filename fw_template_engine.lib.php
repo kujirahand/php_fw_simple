@@ -83,8 +83,8 @@ function template_render($tpl_filename, $tpl_params)
         // {{ include filename }}
         '#\{\{\s*include\s+[\'\"]?(.+?)[\'\"]?\s*}}#is' => function ($m) use ($tpl_params) {
             $file = $m[1];
-            // $enc = json_encode($tpl_params);
-            return "<?php template_render('$file', []);?>";
+            $enc = json_encode($tpl_params);
+            return "<?php template_render('$file', json_decode('$enc', TRUE));?>";
         },
         // {{ if $var.name cond }}
         '#\{\{\s*if\s+\$([a-zA-Z0-9_\.]+)(.*?)\}\}#is' => function ($m) {
