@@ -8,8 +8,9 @@ simple framework for php
 以下のWebアプリを作るために、作成したものです。
 
  - [俳句投稿サイト「あやめ」](https://haiku.uta.pw/)
+ - [KonaWiki2](https://kujirahand.com/konawiki2/)
  - [KonaWiki3](https://kujirahand.com/konawiki3/)
- - [なでしこ3貯蔵校](https://n3s.nadesi.com)
+ - [なでしこ3貯蔵庫](https://n3s.nadesi.com)
 
 フレームワーク使うほどではないけど、何かちょっと最小最低限の仕組みの中で作りたいという場合に最適です。
 何が入っているかと言うと、以下のものが入っています。
