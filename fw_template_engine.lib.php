@@ -154,7 +154,11 @@ function template_render($tpl_filename, $tpl_params)
     if ($tpl_params) {
         extract($tpl_params);
     }
-    file_put_contents($__file_cache, $__fw_contents);
+    // 同時アクセスでの書き込み競合によるキャッシュ破損(不完全なファイルのinclude)を防ぐため、
+    // 一時ファイルに書いてから rename() でアトミックに置き換える。
+    $__file_cache_tmp = $__file_cache.'.'.getmypid().'.'.mt_rand().'.tmp';
+    file_put_contents($__file_cache_tmp, $__fw_contents);
+    rename($__file_cache_tmp, $__file_cache);
     include($__file_cache);
 }
 
