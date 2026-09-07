@@ -1,6 +1,7 @@
 <?php
 // php7 以降に対応
-define('TEMPLATE_VERSION', 'v2_'.filemtime(__FILE__));
+define('TEMPLATE_ENGINE_MTIME', filemtime(__FILE__));
+define('TEMPLATE_VERSION', 'v3_'.TEMPLATE_ENGINE_MTIME);
 define('TEMPLATE_USE_CACHE', true);
 define('TEMPLATE_CACHE_TYPE', 'SAMEFILE'); // SAMEFILE | DATETYPE
 require_once __DIR__.'/fw_template_engine_plugins.lib.php';
@@ -35,7 +36,12 @@ function template_render($tpl_filename, $tpl_params)
     }
   
     // check cache file
+    // テンプレートエンジン自体が更新された場合も古いキャッシュを使わないように、
+    // テンプレートとエンジン(TEMPLATE_VERSION の元になる mtime)の新しい方を基準にする。
     $mtime_tpl = filemtime($file_template);
+    if ($mtime_tpl < TEMPLATE_ENGINE_MTIME) {
+        $mtime_tpl = TEMPLATE_ENGINE_MTIME;
+    }
     if (TEMPLATE_CACHE_TYPE === 'DATETYPE') {
         $file_cache = $DIR_TEMPLATE_CACHE.'/'.
         $tpl_filename.'.'. $mtime_tpl.'_'.TEMPLATE_VERSION.'.php';
