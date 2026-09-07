@@ -1,7 +1,7 @@
 <?php
 // php7 以降に対応
 define('TEMPLATE_VERSION', 'v2_'.filemtime(__FILE__));
-define('TEMPLATE_USE_CACHE', false);
+define('TEMPLATE_USE_CACHE', true);
 define('TEMPLATE_CACHE_TYPE', 'SAMEFILE'); // SAMEFILE | DATETYPE
 require_once __DIR__.'/fw_template_engine_plugins.lib.php';
 
@@ -48,8 +48,14 @@ function template_render($tpl_filename, $tpl_params)
                 extract($tpl_params);
             }
             // include
-            include($file_cache);
-            return;
+            // 壊れたキャッシュ(書き込み途中のファイルなど)を掴んだ場合は、
+            // 削除して下のコンパイル処理で作り直す。
+            try {
+                include($file_cache);
+                return;
+            } catch (ParseError $e) {
+                @unlink($file_cache);
+            }
         }
     } else /* if (TEMPLATE_CACHE_TYPE == 'SAMEFILE') */ {
         $file_cache = $DIR_TEMPLATE_CACHE.'/'.$tpl_filename.'.php';
@@ -63,8 +69,14 @@ function template_render($tpl_filename, $tpl_params)
                 extract($tpl_params);
             }
             // include
-            include($file_cache);
-            return;
+            // 壊れたキャッシュ(書き込み途中のファイルなど)を掴んだ場合は、
+            // 削除して下のコンパイル処理で作り直す。
+            try {
+                include($file_cache);
+                return;
+            } catch (ParseError $e) {
+                @unlink($file_cache);
+            }
         }
     }
     // create cache
@@ -156,9 +168,18 @@ function template_render($tpl_filename, $tpl_params)
     }
     // 同時アクセスでの書き込み競合によるキャッシュ破損(不完全なファイルのinclude)を防ぐため、
     // 一時ファイルに書いてから rename() でアトミックに置き換える。
+    // 書き込みや rename に失敗した時は、壊れたキャッシュを残さず、生成した内容を直接実行する。
     $__file_cache_tmp = $__file_cache.'.'.getmypid().'.'.mt_rand().'.tmp';
-    file_put_contents($__file_cache_tmp, $__fw_contents);
-    rename($__file_cache_tmp, $__file_cache);
+    $__cache_saved = FALSE;
+    $__cache_size = @file_put_contents($__file_cache_tmp, $__fw_contents);
+    if ($__cache_size === strlen($__fw_contents)) {
+        $__cache_saved = @rename($__file_cache_tmp, $__file_cache);
+    }
+    if (!$__cache_saved) {
+        @unlink($__file_cache_tmp);
+        eval('?>'.$__fw_contents);
+        return;
+    }
     include($__file_cache);
 }
 
