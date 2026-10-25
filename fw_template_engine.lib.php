@@ -7,6 +7,9 @@ define('TEMPLATE_CACHE_TYPE', 'SAMEFILE'); // SAMEFILE | DATETYPE
 require_once __DIR__.'/fw_template_engine_plugins.lib.php';
 
 // テンプレートの表示メソッド
+// ※ extract() は EXTR_SKIP で行う: 引数のキーで内部変数
+//   ($file_cache, $file_template 等) を上書きして任意ファイルの
+//   書き込み・include につなげることを防ぐため (konawiki2 Issue #32)
 function template_render($tpl_filename, $tpl_params)
 {
     /*
@@ -48,10 +51,10 @@ function template_render($tpl_filename, $tpl_params)
         if (file_exists($file_cache) && TEMPLATE_USE_CACHE) {
             // extract variable
             if ($FW_TEMPLATE_PARAMS) {
-                extract($FW_TEMPLATE_PARAMS);
+                extract($FW_TEMPLATE_PARAMS, EXTR_SKIP);
             }
             if ($tpl_params) {
-                extract($tpl_params);
+                extract($tpl_params, EXTR_SKIP);
             }
             // include
             // 壊れたキャッシュ(書き込み途中のファイルなど)を掴んだ場合は、
@@ -69,10 +72,10 @@ function template_render($tpl_filename, $tpl_params)
         if ($mtime_tpl < $mtime_cache && TEMPLATE_USE_CACHE) {
             // extract variable
             if ($FW_TEMPLATE_PARAMS) {
-                extract($FW_TEMPLATE_PARAMS);
+                extract($FW_TEMPLATE_PARAMS, EXTR_SKIP);
             }
             if ($tpl_params) {
-                extract($tpl_params);
+                extract($tpl_params, EXTR_SKIP);
             }
             // include
             // 壊れたキャッシュ(書き込み途中のファイルなど)を掴んだ場合は、
@@ -167,10 +170,10 @@ function template_render($tpl_filename, $tpl_params)
     $__fw_contents = $fw_contents;
     // extract variable
     if ($FW_TEMPLATE_PARAMS) {
-        extract($FW_TEMPLATE_PARAMS);
+        extract($FW_TEMPLATE_PARAMS, EXTR_SKIP);
     }
     if ($tpl_params) {
-        extract($tpl_params);
+        extract($tpl_params, EXTR_SKIP);
     }
     // 同時アクセスでの書き込み競合によるキャッシュ破損(不完全なファイルのinclude)を防ぐため、
     // 一時ファイルに書いてから rename() でアトミックに置き換える。
